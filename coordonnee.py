@@ -1,3 +1,11 @@
+"""
+INF4230 - INTELLIGENCE ARTIFICIELLE
+UQAM | Faculté des sciences | Département d'informatique
+TP1 : Jeu du Wumpus
+ETUDIANT : DEGNI KAIKOU LOIC DEGK24059500
+Module : coordonnee.py
+"""
+
 class Coordonnee:
     def __init__(self,i=0, j=0, poids = None):
         self.i = i          # position i
@@ -23,10 +31,10 @@ class Coordonnee:
     def __lt__(self, other):
         return (self.i, self.j) < (other.i, other.j)
     
-    # 👇 pour print(obj)
+    #print(obj)
     def __str__(self):
         return f"({self.i}, {self.j})"
 
-    # 👇 pour dict, list, debug, console
+    #pour dict, list, debug, console
     def __repr__(self):
         return f"Coordonnee(i={self.i}, j={self.j}, poids={self.poids})"

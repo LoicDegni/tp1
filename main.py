@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""
+INF4230 - INTELLIGENCE ARTIFICIELLE
+UQAM | Faculté des sciences | Département d'informatique
+TP1 : Jeu du Wumpus
+ETUDIANT : DEGNI KAIKOU LOIC DEGK24059500
+Module : main.py
+"""
 
 import sys
 from coordonnee import Coordonnee
@@ -64,10 +71,6 @@ with open(sys.argv[1], "r") as file:
         wumpus.append(row_wumpus)
         poids.append(row_poids)
 
-   # print(poids)
-    #print(wumpus)
-    #print(puits)
-
     if pos_col == -1:
         print("Erreur format fichier. Position de l'agent manquante.")
         exit(-1)
@@ -76,41 +79,55 @@ with open(sys.argv[1], "r") as file:
         exit(-1)
 
 # Afficher la carte sur stderr
-sys.stderr.write("carte:\n")
+sys.stderr.write("\ncarte:\n_________________\n")
 
 
 for j in range(len(puits)):
     ligne_poids = []
+    sys.stderr.write("\n| ")
     for i in range(len(puits[j])):
         if puits[j][i]:
             ligne_poids.append(PERTE_MORTELLE)
             #carte_poids[j][i] = PERTE_MORTELLE
-            sys.stderr.write("P")
+            sys.stderr.write("P | ")
         elif wumpus[j][i]:
             ligne_poids.append(PERTE_MORTELLE)
             #carte_poids[j][i] = PERTE_MORTELLE
-            sys.stderr.write("W")
+            sys.stderr.write("W | ")
         else:
             ligne_poids.append(poids[j][i])
             #carte_poids[j][i] = poids[j][i]
-            sys.stderr.write(f"{poids[j][i]}")
+            sys.stderr.write(f"{poids[j][i]} | ")
     carte_poids.append(ligne_poids)
-    sys.stderr.write("\n")
-
-#print(carte_poids)
-#print(poids)
+    sys.stderr.write("\n_________________\n")
+    
 sys.stderr.write("OR: (line " + str(OR_line) + ", col " + str(OR_col) + ")\n")
 sys.stderr.write("Position: (line " + str(pos_line) + ", col " + str(pos_col) + ")\n")
 
-# TODO: trouver la meilleur suite d'action a faire
-
+#==========================
+#         DÉPART           
+#==========================
+path1 = path2 = None
 env = Environnement(carte_poids, puits, wumpus, poids, OR_line, OR_col, pos_line, pos_col)
 
-path1 = env.Resoudre_A_star()
+chemin_vers_or = env.Resoudre_A_star()
+if chemin_vers_or is None:
+    print("===========================\nÉCHEC\n===========================\nIl est impossible de completer cette carte de Wumpus\n", file=sys.stderr)
+    sys.exit(1)
+else: path1 = chemin_vers_or
+
 env.debuter_retour_case_depart()
-path2 = env.Resoudre_A_star()
+chemin_vers_sortie = env.Resoudre_A_star()
+
+if chemin_vers_sortie is None:
+    print("===========================\nÉCHEC\n===========================\nIl est impossible de completer cette carte de Wumpus\n",file=sys.stderr)
+    sys.exit(1)
+else: path2 = chemin_vers_sortie
+
 path = path1 + path2
 
+sys.stdout.write("===========================\nRÉSULTAT\n===========================\n") 
 for a in path:
-    sys.stdout.write(a + "\n")   # une action par ligne
-    sys.stdout.flush()           # OBLIGATOIRE
+    sys.stdout.write(a + "\n") 
+    sys.stdout.flush()           
+    
