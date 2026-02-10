@@ -70,7 +70,7 @@ class Environnement(Generic[S]):
         #Boucle principale
         while file:
             cost, action, coordonnee = heapq.heappop(file)
-            
+            current_cost = cost
             #S'il est impossible d'atteindre l'objectif
             if math.isinf(cost):
                 return None
@@ -120,7 +120,7 @@ class Environnement(Generic[S]):
             if path_element[0] in (SAISIR,QUITTER):
                 nouveau_path.append(path_element[0])
                 coord_courant = path_element[1]
-            elif coord_courant == path_element[1]:
+            elif coord_courant == path_element[1] and path_element[0] not in (FLECHE_GAUCHE,FLECHE_DROITE,FLECHE_HAUT,FLECHE_BAS):
                 nouveau_path.append(path_element[0])
             else:
                 if parents[coord_courant] == path_element[1]:
@@ -184,13 +184,22 @@ class Environnement(Generic[S]):
         h(q) : distance de Manhattan entre prochaine position et position de fin lors
         nb_wumpus_touche : on reduis le cout du tire d'une flèche du nombre de wumpus qu'elle touche
         """
-        #calcul g(q)
-        if action in (FLECHE_GAUCHE,FLECHE_DROITE,FLECHE_HAUT,FLECHE_BAS):
+        #calcul 
+        if action == FLECHE_GAUCHE:
             g = current_cost + COUT_FLECHE - nb_wumpus_touche
+            h = self.calculer_distance_manhattan(next_agent_col, next_agent_line)
+        elif action == FLECHE_DROITE:
+            g = current_cost + COUT_FLECHE - nb_wumpus_touche
+            h = self.calculer_distance_manhattan(next_agent_col, next_agent_line)
+        elif action == FLECHE_HAUT:
+            g = current_cost + COUT_FLECHE - nb_wumpus_touche
+            h = self.calculer_distance_manhattan(next_agent_col, next_agent_line)
+        elif action == FLECHE_BAS:
+            g = current_cost + COUT_FLECHE - nb_wumpus_touche
+            h = self.calculer_distance_manhattan(next_agent_col, next_agent_line)
         else:
             g = current_cost + self.map.sommets[Coordonnee(next_agent_col, next_agent_line)].poids
-        #calcul de h(q)
-        h = self.calculer_distance_manhattan(next_agent_col, next_agent_line)
+            h = self.calculer_distance_manhattan(next_agent_col, next_agent_line)
         f = g + h
         heapq.heappush(file, (f, action, Coordonnee(next_agent_col, next_agent_line)))   
         

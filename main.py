@@ -126,8 +126,8 @@ else: path2 = chemin_vers_sortie
 
 path = path1 + path2
 
-#print("===========================\nRÉSULTAT\n===========================\n") 
 for a in path:
     sys.stdout.write(a + "\n") 
-    sys.stdout.flush()           
+    sys.stdout.flush()
+          
     
