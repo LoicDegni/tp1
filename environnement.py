@@ -70,6 +70,7 @@ class Environnement(Generic[S]):
         #Boucle principale
         while file:
             cost, action, coordonnee = heapq.heappop(file)
+            print(cost)
             current_cost = cost
             #S'il est impossible d'atteindre l'objectif
             if math.isinf(cost):
